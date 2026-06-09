@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>건축가 포트폴리오 - [이름]</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 고급스러운 Pretendard 폰트 적용 -->
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Pretendard Variable"', 'Pretendard', '-apple-system', 'sans-serif'],
+                    },
+                    colors: {
+                        arch: {
+                            light: '#F9F9F8', // 웜 화이트 (종이 질감 느낌)
+                            dark: '#121212',  // 세련된 소프트 블랙
+                            accent: '#888888',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        html { scroll-behavior: smooth; background-color: #F9F9F8; }
+        body { font-family: "Pretendard Variable", sans-serif; letter-spacing: -0.02em; }
+        
+        /* 텍스트 드래그 색상 고급화 */
+        ::selection { background-color: #121212; color: #F9F9F8; }
+
+        /* 매거진 스타일 흑백 -> 컬러 호버 효과 */
+        .project-img-wrap { overflow: hidden; }
+        .project-img { 
+            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), filter 0.8s ease; 
+            filter: grayscale(100%); 
+        }
+        .project-card:hover .project-img { 
+            transform: scale(1.05); 
+            filter: grayscale(0%); 
+        }
+        
+        /* 미니멀한 밑줄 애니메이션 */
+        .hover-underline { position: relative; display: inline-block; }
+        .hover-underline::after {
+            content: ''; position: absolute; width: 0; height: 1px; bottom: -2px; left: 0;
+            background-color: currentColor; transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .hover-underline:hover::after { width: 100%; }
+
+        /* 커스텀 스크롤바 (모달용) */
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #e5e5e5; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #a3a3a3; }
+    </style>
+</head>
+<body class="bg-arch-light text-arch-dark font-sans antialiased overflow-x-hidden">
+
+    <!-- 미니멀 네비게이션바 -->
+    <nav class="fixed w-full z-50 bg-arch-light/90 backdrop-blur-md border-b border-gray-200/50 transition-all duration-300" id="navbar">
+        <div class="max-w-[90%] mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <div class="flex-shrink-0">
+                    <a href="#" class="text-xl font-bold tracking-tight text-arch-dark uppercase">ARCH<span class="text-gray-400">.</span>[NAME]</a>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-12">
+                        <a href="#about" class="hover-underline text-xs font-medium uppercase tracking-[0.15em] text-gray-500 hover:text-arch-dark transition-colors">About</a>
+                        <a href="#portfolio" class="hover-underline text-xs font-medium uppercase tracking-[0.15em] text-gray-500 hover:text-arch-dark transition-colors">Works</a>
+                        <a href="#skills" class="hover-underline text-xs font-medium uppercase tracking-[0.15em] text-gray-500 hover:text-arch-dark transition-colors">Expertise</a>
+                        <a href="#contact" class="hover-underline text-xs font-medium uppercase tracking-[0.15em] text-gray-500 hover:text-arch-dark transition-colors">Contact</a>
+                    </div>
+                </div>
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-arch-dark focus:outline-none">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-linejoin="miter" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- 모바일 메뉴 -->
+        <div id="mobile-menu" class="hidden md:hidden bg-arch-light border-b border-gray-200 absolute w-full">
+            <div class="px-6 py-8 space-y-6 flex flex-col items-center">
+                <a href="#about" class="text-xl font-light tracking-widest uppercase">About</a>
+                <a href="#portfolio" class="text-xl font-light tracking-widest uppercase">Works</a>
+                <a href="#skills" class="text-xl font-light tracking-widest uppercase">Expertise</a>
+                <a href="#contact" class="text-xl font-light tracking-widest uppercase">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 타이포그래피 강조형 히어로 섹션 -->
+    <section id="home" class="relative min-h-screen flex flex-col justify-end pb-24 pt-32 px-4 sm:px-8 lg:px-12">
+        <div class="max-w-[95%] mx-auto w-full flex flex-col justify-between h-full">
+            
+            <div class="mt-12 w-full flex justify-end md:pr-12">
+                <p class="text-right text-gray-500 max-w-sm text-sm md:text-base font-light leading-relaxed">
+                    건축은 비워진 공간(Void)의 경험을 설계하는 과정입니다. 환경과 사람, 그리고 심리적 교감을 탐구합니다.
+                </p>
+            </div>
+            
+            <div class="mt-auto pt-20 relative">
+                <!-- 압도적인 크기의 타이포그래피 -->
+                <h1 class="text-[12vw] leading-[0.85] font-bold tracking-tighter uppercase z-10 relative text-arch-dark mix-blend-difference">
+                    Spatial<br>Narrative
+                </h1>
+                
+                <!-- 비대칭 배경 이미지 (우측 하단) -->
+                <div class="absolute right-0 bottom-0 w-2/5 max-w-xl aspect-[3/4] overflow-hidden -z-10 hidden md:block">
+                    <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop" class="w-full h-full object-cover filter grayscale opacity-60" alt="Architecture Structure">
+                </div>
+            </div>
+            
+            <div class="mt-16 flex items-center gap-4 text-xs font-bold tracking-[0.2em] uppercase text-arch-dark">
+                <span class="w-16 h-[1px] bg-arch-dark"></span>
+                Architecture Portfolio 2026
+            </div>
+        </div>
+    </section>
+
+    <!-- 에디토리얼 스타일 About -->
+    <section id="about" class="py-32 bg-white border-t border-gray-200">
+        <div class="max-w-[90%] mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+                <div class="lg:col-span-5">
+                    <h2 class="text-[10px] font-bold text-gray-400 tracking-[0.2em] uppercase mb-6">About Architect</h2>
+                    <h3 class="text-3xl md:text-5xl font-light leading-tight tracking-tight">
+                        공간과 사람의<br>
+                        <span class="font-bold">심리적 교감</span>을<br>
+                        설계합니다.
+                    </h3>
+                </div>
+                <div class="lg:col-span-7 grid grid-cols-1 md:grid-cols-2 gap-12 text-gray-600 font-light leading-relaxed">
+                    <div>
+                        <p class="mb-6">
+                            저는 형태의 아름다움을 넘어, 공간에 머무는 사람들의 경험과 심리를 깊이 고민합니다. 지속 가능한 환경을 위한 제로 에너지 빌딩(ZEB) 설계부터, 도시의 버려진 공간을 활성화하는 모듈러 건축까지 다양한 스케일의 프로젝트를 진행했습니다.
+                        </p>
+                        <p>
+                            건축은 단순한 조형물이 아니라, 사회적 맥락을 반영하고 문제를 해결하는 논리적 과정이라고 믿습니다. BIM과 파라메트릭 디자인을 활용하여 복잡한 데이터를 분석하고 합리적인 공간을 도출합니다.
+                        </p>
+                    </div>
+                    <div class="flex flex-col justify-between md:border-l md:border-gray-200 md:pl-8 pt-8 md:pt-0 border-t border-gray-200 md:border-t-0">
+                        <div class="mb-10">
+                            <h4 class="text-arch-dark font-bold mb-3 text-[10px] tracking-[0.2em] uppercase">Education</h4>
+                            <p class="text-sm">한국대학교 건축학과 학사 (2018 - 2024)</p>
+                        </div>
+                        <div>
+                            <h4 class="text-arch-dark font-bold mb-3 text-[10px] tracking-[0.2em] uppercase">Certifications</h4>
+                            <ul class="text-sm space-y-2">
+                                <li>건축기사 (한국산업인력공단)</li>
+                                <li>BIM 운용전문가 2급</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 그리드 기반 갤러리 (그림자 제거, 샤프한 디자인) -->
+    <section id="portfolio" class="py-32 bg-arch-light border-t border-gray-200">
+        <div class="max-w-[90%] mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-24 gap-8">
+                <div>
+                    <h2 class="text-[10px] font-bold text-gray-400 tracking-[0.2em] uppercase mb-4">Selected Works</h2>
+                    <h3 class="text-5xl md:text-7xl font-bold tracking-tighter">Projects.</h3>
+                </div>
+                
+                <div class="flex flex-wrap gap-6 text-xs font-bold uppercase tracking-[0.15em]">
+                    <button class="filter-btn active text-arch-dark border-b border-arch-dark pb-1" data-filter="all">All</button>
+                    <button class="filter-btn text-gray-400 hover:text-arch-dark transition-colors pb-1 border-b border-transparent" data-filter="public">Public</button>
+                    <button class="filter-btn text-gray-400 hover:text-arch-dark transition-colors pb-1 border-b border-transparent" data-filter="commercial">Commercial</button>
+                    <button class="filter-btn text-gray-400 hover:text-arch-dark transition-colors pb-1 border-b border-transparent" data-filter="research">Research</button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-y-32 gap-x-12" id="portfolio-grid">
+                
+                <!-- 프로젝트 1 -->
+                <div class="project-card group cursor-pointer" data-category="public" onclick="openModal(1)">
+                    <div class="project-img-wrap aspect-[4/3] w-full bg-gray-200 mb-6">
+                        <img src="https://images.unsplash.com/photo-1511818966892-d7d671e672a2?q=80&w=2071&auto=format&fit=crop" alt="Project 1" class="project-img w-full h-full object-cover">
+                    </div>
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-[10px] font-bold text-gray-400 tracking-[0.2em] uppercase block mb-3">Public / 2023</span>
+                            <h4 class="text-2xl font-bold text-arch-dark tracking-tight transition-colors group-hover:text-gray-500">도심 속 치유의 숲</h4>
+                        </div>
+                        <span class="text-arch-dark opacity-0 group-hover:opacity-100 transition-opacity transform -translate-x-4 group-hover:translate-x-0 duration-300">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-linejoin="miter" stroke-width="1.5" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- 프로젝트 2 (약간 내려서 비대칭 레이아웃 연출) -->
+                <div class="project-card group cursor-pointer md:mt-24" data-category="research" onclick="openModal(2)">
+                    <div class="project-img-wrap aspect-[3/4] w-full bg-gray-200 mb-6">
+                        <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2069&auto=format&fit=crop" alt="Project 2" class="project-img w-full h-full object-cover">
+                    </div>
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-[10px] font-bold text-gray-400 tracking-[0.2em] uppercase block mb-3">Research / 2023</span>
+                            <h4 class="text-2xl font-bold text-arch-dark tracking-tight transition-colors group-hover:text-gray-500">Chicago Climate Resilience</h4>
+                        </div>
+                        <span class="text-arch-dark opacity-0 group-hover:opacity-100 transition-opacity transform -translate-x-4 group-hover:translate-x-0 duration-300">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-linejoin="miter" stroke-width="1.5" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- 프로젝트 3 -->
+                <div class="project-card group cursor-pointer" data-category="commercial" onclick="openModal(3)">
+                    <div class="project-img-wrap aspect-[16/9] w-full bg-gray-200 mb-6">
+                        <img src="https://images.unsplash.com/photo-1545622415-4ba5a27eb2d0?q=80&w=2069&auto=format&fit=crop" alt="Project 3" class="project-img w-full h-full object-cover">
+                    </div>
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-[10px] font-bold text-gray-400 tracking-[0.2em] uppercase block mb-3">Commercial / 2024</span>
+                            <h4 class="text-2xl font-bold text-arch-dark tracking-tight transition-colors group-hover:text-gray-500">Modular Physical SNS</h4>
+                        </div>
+                        <span class="text-arch-dark opacity-0 group-hover:opacity-100 transition-opacity transform -translate-x-4 group-hover:translate-x-0 duration-300">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-linejoin="miter" stroke-width="1.5" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 프로그래스 바 대신 텍스트 기반의 미니멀 스킬 리스트 -->
+    <section id="skills" class="py-32 bg-white border-t border-gray-200">
+        <div class="max-w-[90%] mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-16">
+                <div>
+                    <h2 class="text-[10px] font-bold text-gray-400 tracking-[0.2em] uppercase mb-4">Expertise</h2>
+                    <h3 class="text-4xl md:text-5xl font-bold tracking-tighter mb-6">Tools &<br>Workflows.</h3>
+                </div>
+                
+                <div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-16">
+                    <div>
+                        <h4 class="text-lg font-bold border-b border-arch-dark pb-4 mb-6">3D Modeling & BIM</h4>
+                        <ul class="space-y-4 font-light text-gray-600">
+                            <li class="flex justify-between items-center">
+                                <span class="text-arch-dark">Revit</span>
+                                <span class="text-[10px] font-bold tracking-widest uppercase text-gray-400">Advanced</span>
+                            </li>
+                            <li class="flex justify-between items-center">
+                                <span class="text-arch-dark">Rhinoceros</span>
+                                <span class="text-[10px] font-bold tracking-widest uppercase text-gray-400">Advanced</span>
+                            </li>
+                            <li class="flex justify-between items-center">
+                                <span class="text-arch-dark">AutoCAD</span>
+                                <span class="text-[10px] font-bold tracking-widest uppercase text-gray-400">Expert</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h4 class="text-lg font-bold border-b border-arch-dark pb-4 mb-6">Parametric & Data</h4>
+                        <ul class="space-y-4 font-light text-gray-600">
+                            <li class="flex justify-between items-center">
+                                <span class="text-arch-dark">Grasshopper</span>
+                                <span class="text-[10px] font-bold tracking-widest uppercase text-gray-400">Intermediate</span>
+                            </li>
+                            <li class="flex justify-between items-center">
+                                <span class="text-arch-dark">Ladybug (Env)</span>
+                                <span class="text-[10px] font-bold tracking-widest uppercase text-gray-400">Intermediate</span>
+                            </li>
+                            <li class="flex justify-between items-center">
+                                <span class="text-arch-dark">Python</span>
+                                <span class="text-[10px] font-bold tracking-widest uppercase text-gray-400">Basic</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="md:col-span-2">
+                        <h4 class="text-lg font-bold border-b border-arch-dark pb-4 mb-6">Visualization</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-4 font-light text-gray-600">
+                            <div class="flex justify-between items-center">
+                                <span class="text-arch-dark">D5 Render / Enscape</span>
+                                <span class="text-[10px] font-bold tracking-widest uppercase text-gray-400">Advanced</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-arch-dark">V-Ray</span>
+                                <span class="text-[10px] font-bold tracking-widest uppercase text-gray-400">Intermediate</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-arch-dark">Photoshop</span>
+                                <span class="text-[10px] font-bold tracking-widest uppercase text-gray-400">Expert</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-arch-dark">Illustrator / InDesign</span>
+                                <span class="text-[10px] font-bold tracking-widest uppercase text-gray-400">Advanced</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 파격적인 타이포그래피 푸터/연락처 -->
+    <section id="contact" class="py-32 bg-arch-dark text-arch-light border-t border-gray-800">
+        <div class="max-w-[90%] mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-24">
+                <h2 class="text-[16vw] md:text-[12vw] font-bold leading-[0.8] tracking-tighter hover:text-gray-500 transition-colors cursor-pointer inline-block">
+                    LET'S<br>TALK.
+                </h2>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-16 border-t border-white/20 pt-12">
+                <div>
+                    <h4 class="text-[10px] font-bold tracking-[0.2em] uppercase text-gray-500 mb-8">Contact Info</h4>
+                    <div class="space-y-4 text-lg md:text-xl font-light">
+                        <a href="mailto:your.email@example.com" class="block hover:translate-x-2 transition-transform duration-300">your.email@example.com</a>
+                        <a href="tel:010-1234-5678" class="block hover:translate-x-2 transition-transform duration-300">+82 10-1234-5678</a>
+                        <a href="#" class="block hover:translate-x-2 transition-transform duration-300">Instagram @arch_yourname</a>
+                    </div>
+                </div>
+                
+                <div>
+                    <form class="space-y-8" onsubmit="event.preventDefault(); showMessage('메시지가 전송되었습니다.');">
+                        <div class="border-b border-white/30 pb-2">
+                            <input type="text" placeholder="Your Name" class="w-full bg-transparent border-none outline-none text-white placeholder-gray-600 font-light focus:ring-0 px-0" required>
+                        </div>
+                        <div class="border-b border-white/30 pb-2">
+                            <input type="email" placeholder="Your Email" class="w-full bg-transparent border-none outline-none text-white placeholder-gray-600 font-light focus:ring-0 px-0" required>
+                        </div>
+                        <div class="border-b border-white/30 pb-2">
+                            <textarea placeholder="Project Details" rows="1" class="w-full bg-transparent border-none outline-none text-white placeholder-gray-600 font-light focus:ring-0 px-0 resize-none overflow-hidden" oninput="this.style.height = '';this.style.height = this.scrollHeight + 'px'" required></textarea>
+                        </div>
+                        <button type="submit" class="text-xs font-bold tracking-[0.2em] uppercase flex items-center gap-4 hover:text-gray-400 transition-colors mt-4">
+                            Send Message 
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-linejoin="miter" stroke-width="1.5" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-[#0a0a0a] py-8 text-center text-gray-600 text-[10px] font-bold tracking-widest uppercase">
+        <p>&copy; 2026 [NAME] ARCHITECT. All rights reserved.</p>
+    </footer>
+
+    <!-- 알림 메시지 박스 -->
+    <div id="message-box" class="fixed bottom-10 right-10 bg-arch-dark text-white px-6 py-4 shadow-2xl transform translate-y-20 opacity-0 transition-all duration-300 z-50 flex items-center gap-3 border-l-2 border-white font-light text-sm">
+        <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+        <span id="message-text"></span>
+    </div>
+
+    <!-- 미니멀 풀스크린 모달 -->
+    <div id="project-modal" class="fixed inset-0 z-[60] hidden">
+        <div class="absolute inset-0 bg-arch-dark/90 backdrop-blur-md transition-opacity" onclick="closeModal()"></div>
+        
+        <div class="absolute inset-0 md:inset-8 lg:inset-x-24 lg:inset-y-12 bg-arch-light overflow-hidden flex flex-col transform scale-95 opacity-0 transition-all duration-500 shadow-2xl" id="modal-content">
+            
+            <button onclick="closeModal()" class="absolute top-6 right-6 md:top-8 md:right-8 z-10 w-12 h-12 flex items-center justify-center text-arch-dark hover:rotate-90 transition-transform duration-300">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-linejoin="miter" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            
+            <div class="overflow-y-auto h-full p-6 md:p-16 lg:p-24 custom-scrollbar">
+                <div class="max-w-5xl mx-auto" id="modal-body">
+                    <!-- 데이터 동적 주입 -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const projectsData = {
+            1: {
+                title: "도심 속 치유의 숲", category: "Public Architecture", year: "2023", role: "Individual Project", tools: "Revit, D5 Render, Photoshop",
+                heroImage: "https://images.unsplash.com/photo-1511818966892-d7d671e672a2?q=80&w=2071&auto=format&fit=crop",
+                concept: "현대인들의 스트레스와 심리적 문제를 완화하기 위해 접근성을 높인 도심형 치유 센터입니다. 건물의 입면을 시각적으로 개방하여 심리적 문턱을 낮추고, 내부에 중정(Courtyard) 형태의 자연 공간을 배치하여 동선 내내 자연과 교감할 수 있도록 설계했습니다.",
+                details: [
+                    { img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop", caption: "중앙 정원 투시도" },
+                    { img: "https://images.unsplash.com/photo-1629813580424-6992d9095655?q=80&w=2070&auto=format&fit=crop", caption: "매스 스터디 모델" }
+                ]
+            },
+            2: {
+                title: "Chicago Climate Resilience", category: "Research / Eco-Friendly", year: "2023", role: "Design Lead", tools: "Rhino, Grasshopper, Ladybug",
+                heroImage: "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2069&auto=format&fit=crop",
+                concept: "시카고의 극단적인 겨울철 한파(Polar Vortex)에 대비하여 자급자족이 가능한 커뮤니티 대피소 겸 연구 시설을 제안했습니다. 파라메트릭 디자인을 통해 일사량을 분석하고 외피(Facade) 디자인을 최적화하여 열 손실을 최소화했습니다.",
+                details: [
+                    { img: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1931&auto=format&fit=crop", caption: "파사드 환경 분석 다이어그램" }
+                ]
+            },
+            3: {
+                title: "Modular Physical SNS", category: "Commercial / Urban Renewal", year: "2024", role: "Individual Project", tools: "AutoCAD, SketchUp, V-Ray",
+                heroImage: "https://images.unsplash.com/photo-1545622415-4ba5a27eb2d0?q=80&w=2069&auto=format&fit=crop",
+                concept: "도심 내 증가하는 폐주유소 부지를 활용한 프로젝트입니다. 온라인의 '해시태그' 개념을 물리적 공간으로 가져와, 사람들이 공통된 취미나 관심사로 모일 수 있는 팝업 형태의 모듈러 건축물을 설계했습니다. 결합과 해체가 용이한 조인트 시스템을 제안했습니다.",
+                details: [
+                    { img: "https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=2069&auto=format&fit=crop", caption: "모듈 결합 상세 및 평면도" }
+                ]
+            }
+        };
+
+        // 네비게이션 효과
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('border-b', 'border-gray-200');
+            } else {
+                navbar.classList.remove('border-b', 'border-gray-200');
+            }
+        });
+
+        // 모바일 메뉴
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+        mobileMenu.querySelectorAll('a').forEach(link => link.addEventListener('click', () => mobileMenu.classList.add('hidden')));
+
+        // 알림 메시지
+        function showMessage(text) {
+            const msgBox = document.getElementById('message-box');
+            document.getElementById('message-text').innerText = text;
+            msgBox.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => msgBox.classList.add('translate-y-20', 'opacity-0'), 3000);
+        }
+
+        // 필터링
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const projectCards = document.querySelectorAll('.project-card');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => {
+                    b.classList.remove('active', 'text-arch-dark', 'border-arch-dark');
+                    b.classList.add('text-gray-400', 'border-transparent');
+                });
+                btn.classList.remove('text-gray-400', 'border-transparent');
+                btn.classList.add('active', 'text-arch-dark', 'border-arch-dark');
+
+                const filterValue = btn.getAttribute('data-filter');
+                projectCards.forEach(card => {
+                    if (filterValue === 'all' || card.getAttribute('data-category') === filterValue) {
+                        card.style.display = 'block';
+                        card.animate([ { opacity: 0 }, { opacity: 1 } ], { duration: 500, fill: 'forwards' });
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // 모달 로직
+        const modal = document.getElementById('project-modal');
+        const modalContent = document.getElementById('modal-content');
+        const modalBody = document.getElementById('modal-body');
+
+        window.openModal = function(id) {
+            const data = projectsData[id];
+            if(!data) return;
+
+            let detailsHtml = '';
+            data.details.forEach(detail => {
+                detailsHtml += `
+                    <div class="mb-12">
+                        <div class="w-full bg-gray-200 overflow-hidden mb-4 aspect-video">
+                            <img src="${detail.img}" alt="Detail" class="w-full h-full object-cover">
+                        </div>
+                        <p class="text-[10px] font-bold tracking-[0.2em] uppercase text-gray-400 text-right">${detail.caption}</p>
+                    </div>
+                `;
+            });
+
+            // 매거진 스타일 모달 내용
+            modalBody.innerHTML = `
+                <div class="mb-16">
+                    <span class="inline-block text-arch-dark text-[10px] font-bold uppercase tracking-[0.2em] mb-6 border-b border-arch-dark pb-1">${data.category} / ${data.year}</span>
+                    <h2 class="text-4xl md:text-6xl font-bold tracking-tighter mb-12 text-arch-dark">${data.title}</h2>
+                    <div class="flex flex-col md:flex-row gap-12 text-sm text-gray-600 border-t border-gray-300 pt-8">
+                        <div><strong class="text-arch-dark block mb-2 uppercase tracking-[0.2em] text-[10px]">Role</strong> <span class="font-light">${data.role}</span></div>
+                        <div><strong class="text-arch-dark block mb-2 uppercase tracking-[0.2em] text-[10px]">Tools</strong> <span class="font-light">${data.tools}</span></div>
+                    </div>
+                </div>
+                <div class="aspect-video w-full mb-20 overflow-hidden bg-gray-200">
+                    <img src="${data.heroImage}" alt="${data.title}" class="w-full h-full object-cover">
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-24 border-b border-gray-200 pb-24">
+                    <div class="lg:col-span-4">
+                        <h3 class="text-xl font-bold text-arch-dark">Project<br>Concept</h3>
+                    </div>
+                    <div class="lg:col-span-8">
+                        <p class="text-lg text-gray-600 font-light leading-relaxed">${data.concept}</p>
+                    </div>
+                </div>
+                <div class="pb-12">
+                    ${detailsHtml}
+                </div>
+            `;
+
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modalContent.classList.remove('scale-95', 'opacity-0');
+                modalContent.classList.add('scale-100', 'opacity-100');
+            }, 10);
+            document.body.style.overflow = 'hidden';
+        };
+
+        window.closeModal = function() {
+            modalContent.classList.remove('scale-100', 'opacity-100');
+            modalContent.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+            }, 500);
+        };
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !modal.classList.contains('hidden')) closeModal();
+        });
+    </script>
+</body>
+</html>
