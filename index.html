@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>건축가 포트폴리오 - [이름]</title>
+    <title>건축가 포트폴리오 - Park Hyeonseo</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- 고급스러운 Pretendard 폰트 적용 -->
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
@@ -51,11 +51,14 @@
         }
         .hover-underline:hover::after { width: 100%; }
 
-        /* 커스텀 스크롤바 (모달용) */
+        /* 커스텀 스크롤바 (모달 및 방명록용) */
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #e5e5e5; }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #a3a3a3; }
+        
+        /* 방명록 입력 효과 */
+        .guestbook-input:focus { border-color: #121212; box-shadow: none; }
     </style>
 </head>
 <body class="bg-arch-light text-arch-dark font-sans antialiased overflow-x-hidden">
@@ -65,13 +68,14 @@
         <div class="max-w-[90%] mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-20 items-center">
                 <div class="flex-shrink-0">
-                    <a href="#" class="text-xl font-bold tracking-tight text-arch-dark uppercase">ARCH<span class="text-gray-400">.</span>[NAME]</a>
+                    <a href="#" class="text-xl font-bold tracking-tight text-arch-dark uppercase">ARCH<span class="text-gray-400">.</span>PARK</a>
                 </div>
                 <div class="hidden md:block">
-                    <div class="ml-10 flex items-baseline space-x-12">
+                    <div class="ml-10 flex items-baseline space-x-10">
                         <a href="#about" class="hover-underline text-xs font-medium uppercase tracking-[0.15em] text-gray-500 hover:text-arch-dark transition-colors">About</a>
                         <a href="#portfolio" class="hover-underline text-xs font-medium uppercase tracking-[0.15em] text-gray-500 hover:text-arch-dark transition-colors">Works</a>
                         <a href="#skills" class="hover-underline text-xs font-medium uppercase tracking-[0.15em] text-gray-500 hover:text-arch-dark transition-colors">Expertise</a>
+                        <a href="#guestbook" class="hover-underline text-xs font-medium uppercase tracking-[0.15em] text-gray-500 hover:text-arch-dark transition-colors">Guestbook</a>
                         <a href="#contact" class="hover-underline text-xs font-medium uppercase tracking-[0.15em] text-gray-500 hover:text-arch-dark transition-colors">Contact</a>
                     </div>
                 </div>
@@ -88,6 +92,7 @@
                 <a href="#about" class="text-xl font-light tracking-widest uppercase">About</a>
                 <a href="#portfolio" class="text-xl font-light tracking-widest uppercase">Works</a>
                 <a href="#skills" class="text-xl font-light tracking-widest uppercase">Expertise</a>
+                <a href="#guestbook" class="text-xl font-light tracking-widest uppercase">Guestbook</a>
                 <a href="#contact" class="text-xl font-light tracking-widest uppercase">Contact</a>
             </div>
         </div>
@@ -303,6 +308,63 @@
         </div>
     </section>
 
+    <!-- 실시간 방명록 섹션 추가 -->
+    <section id="guestbook" class="py-32 bg-arch-light border-t border-gray-200">
+        <div class="max-w-[90%] mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-16">
+                <!-- 방명록 헤더 및 작성 폼 -->
+                <div class="lg:col-span-5 flex flex-col justify-between">
+                    <div>
+                        <h2 class="text-[10px] font-bold text-gray-400 tracking-[0.2em] uppercase mb-4">Leave a message</h2>
+                        <h3 class="text-4xl md:text-5xl font-bold tracking-tighter mb-6">Guestbook.</h3>
+                        <p class="text-gray-600 font-light leading-relaxed mb-12 text-sm">
+                            방문해 주셔서 감사합니다.<br>포트폴리오에 대한 소감이나 남기고 싶은 말씀을 자유롭게 적어주세요.
+                        </p>
+                    </div>
+                    
+                    <form id="guestbook-form" class="space-y-6 mt-auto bg-white p-8 border border-gray-200">
+                        <div class="border-b border-gray-300 pb-2">
+                            <input type="text" id="gb-name" placeholder="Name" class="w-full bg-transparent border-none outline-none text-arch-dark placeholder-gray-400 font-light focus:ring-0 px-0 guestbook-input" required maxlength="20">
+                        </div>
+                        <div class="border-b border-gray-300 pb-2 relative">
+                            <textarea id="gb-message" placeholder="Message" rows="2" class="w-full bg-transparent border-none outline-none text-arch-dark placeholder-gray-400 font-light focus:ring-0 px-0 resize-none overflow-hidden guestbook-input" oninput="this.style.height = '';this.style.height = this.scrollHeight + 'px'" required maxlength="200"></textarea>
+                            <span id="char-count" class="absolute bottom-2 right-0 text-[10px] text-gray-400">0/200</span>
+                        </div>
+                        <button type="submit" id="gb-submit" class="w-full py-4 text-xs font-bold tracking-[0.2em] uppercase bg-arch-dark text-white hover:bg-gray-800 transition-colors flex justify-center items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                            <span>Post Message</span>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-linejoin="miter" stroke-width="1.5" d="M12 4v16m8-8H4"></path></svg>
+                        </button>
+                    </form>
+                </div>
+                
+                <!-- 방명록 리스트 -->
+                <div class="lg:col-span-7 bg-white border border-gray-200 h-[600px] flex flex-col">
+                    <div class="p-6 border-b border-gray-200 flex justify-between items-center bg-gray-50">
+                        <span class="text-[10px] font-bold tracking-[0.2em] uppercase text-arch-dark">Recent Messages</span>
+                        <div class="flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                            <span class="text-[10px] text-gray-500 uppercase tracking-widest">Live</span>
+                        </div>
+                    </div>
+                    
+                    <div id="guestbook-list" class="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar relative">
+                        <!-- 로딩 표시기 -->
+                        <div id="gb-loading" class="absolute inset-0 flex items-center justify-center bg-white/80 z-10">
+                            <div class="flex items-center gap-2 text-gray-400 text-xs tracking-widest uppercase">
+                                <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-arch-dark" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                Loading...
+                            </div>
+                        </div>
+                        <!-- 메시지들이 여기에 동적으로 추가됩니다 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- 파격적인 타이포그래피 푸터/연락처 -->
     <section id="contact" class="py-32 bg-arch-dark text-arch-light border-t border-gray-800">
         <div class="max-w-[90%] mx-auto px-4 sm:px-6 lg:px-8">
@@ -316,9 +378,9 @@
                 <div>
                     <h4 class="text-[10px] font-bold tracking-[0.2em] uppercase text-gray-500 mb-8">Contact Info</h4>
                     <div class="space-y-4 text-lg md:text-xl font-light">
-                        <a href="mailto:your.email@example.com" class="block hover:translate-x-2 transition-transform duration-300">your.email@example.com</a>
+                        <a href="mailto:parkhyeonseo@example.com" class="block hover:translate-x-2 transition-transform duration-300">parkhyeonseo@example.com</a>
                         <a href="tel:010-1234-5678" class="block hover:translate-x-2 transition-transform duration-300">+82 10-1234-5678</a>
-                        <a href="#" class="block hover:translate-x-2 transition-transform duration-300">Instagram @arch_yourname</a>
+                        <a href="#" class="block hover:translate-x-2 transition-transform duration-300">Instagram @arch_parkhyeonseo</a>
                     </div>
                 </div>
                 
@@ -344,7 +406,7 @@
     </section>
 
     <footer class="bg-[#0a0a0a] py-8 text-center text-gray-600 text-[10px] font-bold tracking-widest uppercase">
-        <p>&copy; 2026 [NAME] ARCHITECT. All rights reserved.</p>
+        <p>&copy; 2026 PARK HYEONSEO ARCHITECT. All rights reserved.</p>
     </footer>
 
     <!-- 알림 메시지 박스 -->
@@ -371,6 +433,199 @@
         </div>
     </div>
 
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // 환경 변수 처리 (협업 환경 지원)
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : { /* Fallback config if needed */ };
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'arch-portfolio-guestbook';
+        
+        let db, auth;
+        
+        try {
+            const app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            auth = getAuth(app);
+        } catch (e) {
+            console.error("Firebase 초기화 에러:", e);
+        }
+
+        // DOM 요소
+        const gbForm = document.getElementById('guestbook-form');
+        const gbName = document.getElementById('gb-name');
+        const gbMessage = document.getElementById('gb-message');
+        const gbList = document.getElementById('guestbook-list');
+        const gbSubmit = document.getElementById('gb-submit');
+        const charCount = document.getElementById('char-count');
+        const gbLoading = document.getElementById('gb-loading');
+
+        // 글자 수 세기 기능
+        gbMessage.addEventListener('input', () => {
+            const len = gbMessage.value.length;
+            charCount.textContent = `${len}/200`;
+            if (len >= 200) {
+                charCount.classList.add('text-red-500');
+            } else {
+                charCount.classList.remove('text-red-500');
+            }
+        });
+
+        // 상대 시간 표시 함수 (예: '방금 전', '2시간 전')
+        function timeAgo(date) {
+            if (!date) return '방금 전';
+            const seconds = Math.floor((new Date() - date) / 1000);
+            
+            let interval = Math.floor(seconds / 31536000);
+            if (interval > 1) return interval + "년 전";
+            
+            interval = Math.floor(seconds / 2592000);
+            if (interval > 1) return interval + "개월 전";
+            
+            interval = Math.floor(seconds / 86400);
+            if (interval > 1) return interval + "일 전";
+            
+            interval = Math.floor(seconds / 3600);
+            if (interval > 1) return interval + "시간 전";
+            
+            interval = Math.floor(seconds / 60);
+            if (interval > 1) return interval + "분 전";
+            
+            return Math.floor(seconds) > 10 ? Math.floor(seconds) + "초 전" : "방금 전";
+        }
+
+        // 인증 및 데이터 리스닝 시작
+        async function initGuestbook() {
+            if (!auth || !db) {
+                gbLoading.innerHTML = '<span class="text-red-500">데이터베이스 연결 실패</span>';
+                return;
+            }
+
+            try {
+                // 인증 (커스텀 토큰 또는 익명)
+                if (typeof __initial_auth_token !== 'undefined') {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+
+                // Public collection 경로: /artifacts/{appId}/public/data/guestbook
+                const gbCollectionRef = collection(db, 'artifacts', appId, 'public', 'data', 'guestbook');
+                const q = query(gbCollectionRef);
+
+                // 실시간 데이터 구독 (Firestore 제약 상 orderBy 대신 프론트엔드에서 정렬)
+                onSnapshot(q, (snapshot) => {
+                    gbLoading.style.display = 'none';
+                    const messages = [];
+                    
+                    snapshot.forEach((doc) => {
+                        const data = doc.data();
+                        messages.push({
+                            id: doc.id,
+                            ...data,
+                            // 서버 타임스탬프가 아직 생성되지 않은 경우 로컬 시간 사용
+                            createdAt: data.createdAt?.toDate() || new Date() 
+                        });
+                    });
+
+                    // 최신순 정렬
+                    messages.sort((a, b) => b.createdAt - a.createdAt);
+                    renderMessages(messages);
+                }, (error) => {
+                    console.error("방명록 로드 에러:", error);
+                    gbLoading.innerHTML = '<span class="text-red-500 text-xs">데이터를 불러오지 못했습니다.</span>';
+                });
+
+            } catch (error) {
+                console.error("인증 에러:", error);
+                gbLoading.innerHTML = '<span class="text-red-500 text-xs">인증에 실패했습니다.</span>';
+            }
+        }
+
+        // 메시지 화면에 렌더링
+        function renderMessages(messages) {
+            if (messages.length === 0) {
+                gbList.innerHTML = `
+                    <div class="h-full flex flex-col items-center justify-center text-gray-400 space-y-4 opacity-50">
+                        <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-linejoin="miter" stroke-width="1" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                        <p class="text-xs tracking-widest uppercase">아직 작성된 메시지가 없습니다.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            gbList.innerHTML = '';
+            messages.forEach(msg => {
+                const safeName = msg.name.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                const safeMessage = msg.message.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, '<br>');
+                
+                const msgEl = document.createElement('div');
+                msgEl.className = 'border-b border-gray-100 pb-6 last:border-0 hover:bg-gray-50/50 transition-colors p-2 -mx-2 rounded-sm';
+                msgEl.innerHTML = `
+                    <div class="flex justify-between items-baseline mb-2">
+                        <strong class="text-arch-dark font-medium">${safeName}</strong>
+                        <span class="text-[10px] text-gray-400 tracking-wider">${timeAgo(msg.createdAt)}</span>
+                    </div>
+                    <p class="text-gray-600 font-light text-sm leading-relaxed">${safeMessage}</p>
+                `;
+                gbList.appendChild(msgEl);
+            });
+        }
+
+        // 방명록 작성 제출 이벤트
+        gbForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const name = gbName.value.trim();
+            const message = gbMessage.value.trim();
+
+            if (!name || !message || !auth.currentUser) return;
+
+            // 로딩 상태 처리
+            gbSubmit.disabled = true;
+            const originalBtnContent = gbSubmit.innerHTML;
+            gbSubmit.innerHTML = `
+                <svg class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span>Sending...</span>
+            `;
+
+            try {
+                const gbCollectionRef = collection(db, 'artifacts', appId, 'public', 'data', 'guestbook');
+                await addDoc(gbCollectionRef, {
+                    name: name,
+                    message: message,
+                    createdAt: serverTimestamp(),
+                    userId: auth.currentUser.uid
+                });
+
+                // 폼 초기화
+                gbName.value = '';
+                gbMessage.value = '';
+                gbMessage.style.height = '';
+                charCount.textContent = '0/200';
+                
+                // 전역 알림 함수 호출 (기존 HTML에 정의되어 있음)
+                if(typeof window.showMessage === 'function') {
+                    window.showMessage('방명록이 등록되었습니다.');
+                }
+
+            } catch (error) {
+                console.error("메시지 저장 에러:", error);
+                alert("오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
+            } finally {
+                gbSubmit.disabled = false;
+                gbSubmit.innerHTML = originalBtnContent;
+            }
+        });
+
+        // 초기화 실행
+        document.addEventListener('DOMContentLoaded', initGuestbook);
+    </script>
+    
     <script>
         const projectsData = {
             1: {
